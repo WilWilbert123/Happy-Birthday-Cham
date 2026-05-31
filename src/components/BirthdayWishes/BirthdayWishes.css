@@ -1,0 +1,186 @@
+/* C:\Users\HERROZ\Desktop\Happy-Birthday-Cham\src\components\BirthdayWishes\BirthdayWishes.css */
+
+/* Birthday Wishes Container */
+.birthday-wishes-container {
+  padding: 5rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .birthday-wishes-container {
+    padding: 5rem 2rem;
+  }
+}
+
+/* Inner Container */
+.wishes-inner {
+  max-width: 56rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Header Section */
+.wishes-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.wishes-icon {
+  width: 3rem;
+  height: 3rem;
+  color: #fde047;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem;
+}
+
+.wishes-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: white;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .wishes-title {
+    font-size: 3rem;
+  }
+}
+
+.wishes-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.125rem;
+}
+
+@media (min-width: 768px) {
+  .wishes-subtitle {
+    font-size: 1.25rem;
+  }
+}
+
+/* Form Styles */
+.wishes-form {
+  margin-bottom: 3rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .form-group {
+    flex-direction: row;
+  }
+}
+
+.wishes-input {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.wishes-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.wishes-input:focus {
+  ring: 2px solid #f472b6;
+  border-color: #f472b6;
+}
+
+.wishes-submit-btn {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #ec4899, #a855f7);
+  color: white;
+  font-weight: 600;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+
+.wishes-submit-btn:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: scale(1.02);
+}
+
+.wishes-submit-btn:active {
+  transform: scale(0.98);
+}
+
+.success-message {
+  color: #86efac;
+  text-align: center;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Wishes List */
+.wishes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.wish-item {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.wish-item:hover {
+  transform: translateX(5px);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.wish-emoji {
+  font-size: 1.5rem;
+}
+
+.wish-text {
+  color: rgba(255, 255, 255, 0.9);
+  flex: 1;
+  line-height: 1.5;
+}
+
+.wish-heart {
+  color: #f9a8d4;
+  font-size: 0.875rem;
+}
+
+/* Animations */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.wish-item {
+  animation: slideInLeft 0.5s ease-out forwards;
+}
+

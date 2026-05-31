@@ -1,0 +1,79 @@
+/* C:\Users\HERROZ\Desktop\Happy-Birthday-Cham\src\components\Gallery\Gallery.css */
+.gallery-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #000000 0%, #000000 100%);
+  padding: 2rem 1rem 4rem;
+}
+
+.gallery-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.gallery-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .gallery-title {
+    font-size: 3.5rem;
+  }
+}
+
+.gallery-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .gallery-subtitle {
+    font-size: 1.25rem;
+  }
+}
+
+.gallery-instruction {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+.dome-gallery-container {
+  width: 100%;
+  height: 600px;
+  position: relative;
+  margin-top: 2rem;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 768px) {
+  .gallery-wrapper {
+    padding: 1rem 0.5rem 2rem;
+  }
+  
+  .gallery-title {
+    font-size: 1.8rem;
+  }
+  
+  .gallery-subtitle {
+    font-size: 0.9rem;
+    padding: 0 1rem;
+  }
+  
+  .gallery-instruction {
+    font-size: 0.7rem;
+  }
+  
+  .dome-gallery-container {
+    height: 400px;
+  }
+}

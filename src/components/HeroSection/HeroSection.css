@@ -1,0 +1,169 @@
+/* C:\Users\HERROZ\Desktop\Happy-Birthday-Cham\src\components\HeroSection\HeroSection.css */
+
+/* Love Letter Screen */
+.love-letter-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+  overflow: hidden;
+}
+
+/* Simple Background */
+.simple-bg {
+  position: absolute;
+  inset: 0;
+}
+
+/* Container */
+.envelope-container {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Envelope Wrapper */
+.envelope-wrapper {
+  cursor: pointer;
+  display: inline-block;
+}
+
+/* Envelope - Compact Size */
+.envelope {
+  position: relative;
+  width: 200px;
+  height: 140px;
+  transition: transform 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .envelope {
+    width: 250px;
+    height: 175px;
+  }
+}
+
+/* Envelope Back */
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border-radius: 8px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Envelope Front */
+.envelope-front {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Simple Envelope Flap */
+.envelope-flap-simple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-left: 100px solid transparent;
+  border-right: 100px solid transparent;
+  border-top: 70px solid #f87171;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .envelope-flap-simple {
+    border-left-width: 125px;
+    border-right-width: 125px;
+    border-top-width: 87px;
+  }
+}
+
+/* Envelope Heart */
+.envelope-heart {
+  width: 40px;
+  height: 40px;
+  margin-top: 20px;
+  opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+  .envelope-heart {
+    width: 50px;
+    height: 50px;
+    margin-top: 25px;
+  }
+}
+
+/* Envelope Text */
+.envelope-text {
+  margin-top: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 1px;
+}
+
+@media (min-width: 768px) {
+  .envelope-text {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+}
+
+/* Birthday Content Wrapper */
+.birthday-content-wrapper {
+  width: 100%;
+}
+
+/* Body class for scroll prevention */
+body.love-letter-open {
+  overflow: hidden;
+}
+
+/* Hover effect - simple */
+.envelope-wrapper:hover .envelope {
+  transform: translateY(-5px);
+}
+
+/* Mobile optimization */
+@media (max-width: 640px) {
+  .envelope {
+    width: 160px;
+    height: 112px;
+  }
+  
+  .envelope-flap-simple {
+    border-left-width: 80px;
+    border-right-width: 80px;
+    border-top-width: 56px;
+  }
+  
+  .envelope-heart {
+    width: 30px;
+    height: 30px;
+    margin-top: 15px;
+  }
+  
+  .envelope-text {
+    font-size: 12px;
+    margin-top: 6px;
+  }
+}
