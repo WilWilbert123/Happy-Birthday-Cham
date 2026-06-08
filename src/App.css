@@ -40,12 +40,12 @@
   pointer-events: auto;
 }
 
-/* Birthday content styles - appears after love letter is clicked */
+
 .birthday-content {
   animation: fadeInUp 0.8s ease-out;
   position: relative;
   z-index: 2;
-  pointer-events: none; /* Let mouse pass to galaxy */
+  pointer-events: none; 
 }
 
 /* Make interactive elements clickable */
