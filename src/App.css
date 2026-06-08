@@ -29,7 +29,7 @@
   pointer-events: none;
 }
 
-/* Galaxy Background - Only visible on second screen */
+/* Galaxy Background */
 .galaxy-background {
   position: fixed !important;
   top: 0;
