@@ -1,306 +1,333 @@
-/* C:\Users\HERROZ\Desktop\Happy-Birthday-Cham\src\App.css */
-
-.app {
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-}
-
-/* First Screen - Dark background for clean intro transition */
-.first-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
+.envelope-stack-item {
   width: 100%;
-  height: 100%;
-  z-index: 100;
-  background: linear-gradient(135deg, #000000 0%, #000000 100%);
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-.first-screen.visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-.first-screen.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-/* Galaxy Background placement */
-.galaxy-background {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: auto;
-}
-
-.birthday-content {
-  animation: fadeInUp 0.8s ease-out;
-  position: relative;
-  z-index: 2;
-  pointer-events: none;
-}
-
-/* Make interactive elements clickable */
-.wish-card-stack,
-.wishes-input,
-.wishes-submit-btn,
-.wish-item,
-.gallery-container,
-button,
-.scroll-stack-card,
-.regular-content > *,
-footer {
-  pointer-events: auto !important;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Enhanced Premium Glassmorphism Stack Cards */
-.wish-card-stack {
-  position: relative;
-  overflow: hidden;
   display: flex;
-  align-items: center;
   justify-content: center;
-  min-height: 240px;
-  padding: 1.5rem;
-  border-radius: 1.5rem;
-  box-sizing: border-box;
-  width: 100%;
-
-  /* Lighter card styling for smoother scrolling */
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  box-shadow: 0 10px 30px rgba(2,6,23,0.45);
-  transition: box-shadow 220ms cubic-bezier(.2,.9,.2,1), transform 220ms ease, border-color 220ms ease;
-  will-change: transform, opacity;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  align-items: center;
+  perspective: 2500px; /* Enhanced deep 3D perspective */
+  backface-visibility: hidden;
 }
 
-/* Sheen + soft inner glow to simulate liquid surface */
-.wish-card-stack::before {
+/* Grand-Sized Solid Interactive Canvas */
+.envelope-wrapper {
+  width: 100%;
+  max-width: 680px; /* Increased from 580px for a massive look */
+  height: 400px;     /* Increased from 340px */
+  position: relative;
+  cursor: pointer;
+  
+  /* Strict 3D layering to eliminate rendering blinks/flicker */
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
+  
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.envelope-wrapper:hover {
+  transform: translateY(-12px) scale(1.04);
+}
+
+/* Solid Light Pink Envelope Body */
+.envelope {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #ffe3e8; /* Soft, non-transparent luxurious light pink base */
+  border: 2px solid rgba(244, 63, 94, 0.25); /* Elegant matching subtle rose border */
+  border-radius: 2rem;
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+  
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Prevent dynamic CSS recalculations during scroll stack updates */
+.scroll-stack-scroller.is-scrolling .envelope {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.35) !important;
+}
+
+/* Dimensional pocket shadows & folds */
+.envelope::before {
   content: "";
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  background: linear-gradient(120deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.02) 40%, rgba(255,255,255,0) 60%);
-  mix-blend-mode: overlay;
-  transform: translateY(-30%) rotate(-6deg) scale(1.2);
-  opacity: 0.9;
-  transition: transform 600ms cubic-bezier(.22,.9,.35,1), opacity 300ms ease;
+  /* Darker pink shading for realistic structural look */
+  background: linear-gradient(32deg, rgba(225, 29, 72, 0.08) 50%, transparent 50.5%);
+  z-index: 2;
 }
 
-.wish-card-stack::after {
-  content: "";
+.envelope-detail {
   position: absolute;
-  right: -30%;
-  top: -10%;
-  width: 140%;
-  height: 140%;
-  background: radial-gradient(closest-side, rgba(255,255,255,0.06), rgba(255,255,255,0) 45%);
-  filter: blur(18px);
-  opacity: 0.6;
-  pointer-events: none;
-  transition: opacity 300ms ease;
+  inset: 0;
+  background: linear-gradient(-32deg, rgba(225, 29, 72, 0.05) 50%, transparent 50.5%);
+  z-index: 2;
 }
 
-@media (min-width: 768px) {
-  .wish-card-stack {
-    padding: 3rem;
-    min-height: 350px;
-  }
-}
-
-.wish-card-stack:hover {
-  border-color: rgba(255, 255, 255, 0.4) !important;
-}
-
-/* Reduce expensive rendering while scrolling to avoid blinking */
-.scroll-stack-scroller.is-scrolling .wish-card-stack {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15) !important;
-  transition: none !important;
-}
-
-.scroll-stack-scroller.is-scrolling .wish-icon-wrapper {
-  box-shadow: none !important;
-  transition: none !important;
-}
-
-.scroll-stack-scroller.is-scrolling .wish-title,
-.scroll-stack-scroller.is-scrolling .wish-message {
-  text-shadow: none !important;
-}
-
-.wish-card-content {
-  text-align: center;
+/* Top triangle fold - Slightly deeper pink to give realistic depth shadowing */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  position: relative;
+  height: 50%;
+  background: #ffd1dc; /* Deep luxury pastel pink flap */
+  border-bottom: 2px solid rgba(244, 63, 94, 0.2);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  z-index: 4;
+  transform-origin: top;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  backface-visibility: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-/* Vivid Icon Container with custom gradients fallback */
-.wish-icon-wrapper {
-  width: 4.5rem;
-  height: 4.5rem;
+.envelope-wrapper:hover .envelope-flap {
+  transform: rotateX(35deg); /* Flap opens wide */
+}
+
+/* Paper letter preview peeking up from inside */
+.envelope-paper {
+  position: absolute;
+  bottom: 25px;
+  left: 6%;
+  width: 88%;
+  height: 72%;
+  background: #fffdfa; /* Warm white vintage stationery texture */
+  border-radius: 1rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  transform: translateY(25px);
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.1);
+}
+
+.envelope-wrapper:hover .envelope-paper {
+  transform: translateY(-35px); /* Peeks higher out of the grand envelope */
+}
+
+.paper-preview-text {
+  font-family: 'Playfair Display', serif;
+  color: #e11d48; /* Warm rose lettering */
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Wax-Inspired Premium Seal */
+.envelope-seal-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  backface-visibility: hidden;
+}
+
+.envelope-seal {
+  width: 4.8rem; /* Scaled larger */
+  height: 4.8rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.75rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  position: relative;
-  /* Improve transform/scroll performance */
-  will-change: transform, opacity;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  box-shadow: 0 8px 25px rgba(225, 29, 72, 0.4), inset 0 2px 5px rgba(255,255,255,0.4);
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  transition: transform 0.3s ease;
 }
 
-/* Safe Native CSS Gradients if Tailwind configurations don't scan them dynamically */
-.wish-icon-wrapper.from-pink-500 { background: linear-gradient(135deg, #f472b6, #f43f5e); }
-.wish-icon-wrapper.from-purple-500 { background: linear-gradient(135deg, #a855f7, #6366f1); }
-.wish-icon-wrapper.from-amber-400 { background: linear-gradient(135deg, #fbbf24, #f97316); }
-.wish-icon-wrapper.from-cyan-400 { background: linear-gradient(135deg, #22d3ee, #3b82f6); }
-.wish-icon-wrapper.from-emerald-400 { background: linear-gradient(135deg, #34d399, #14b8a6); }
-.wish-icon-wrapper.from-fuchsia-500 { background: linear-gradient(135deg, #d946ef, #ec4899); }
-
-.wish-icon {
-  width: 2.25rem;
-  height: 2.25rem;
+.seal-icon {
+  width: 2.2rem;
+  height: 2.2rem;
   color: white;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
 }
 
-/* Clean, High-Contrast Typography for Ambient Dark Backgrounds */
-.wish-title {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 0.75rem;
+/* High-Contrast Typographical Overlays */
+.envelope-front-label {
+  position: absolute;
+  bottom: 32px;
+  left: 36px;
+  z-index: 3;
+}
+
+.label-to {
+  color: #4c0519; /* High contrast deep wine burgundy */
   font-family: 'Playfair Display', serif;
-  letter-spacing: 0.4px;
-  text-shadow: none;
+  font-weight: 800;
+  font-size: 1.6rem;
+  margin: 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.6);
 }
 
-@media (min-width: 768px) {
-  .wish-title {
-    font-size: 2.25rem;
-  }
+.label-click-hint {
+  color: #9f1239;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin: 6px 0 0 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-.wish-message {
-  color: rgba(255, 255, 255, 0.95);
-  line-height: 1.6;
-  font-size: 1rem;
-  font-weight: 400;
-  max-width: 92%;
-  margin: 0 auto;
-  text-shadow: none;
+/* --- Focused Center Letter Modal --- */
+.letter-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.85); /* Slightly darker for supreme contrast */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.3s forwards ease-out;
 }
 
-@media (min-width: 768px) {
-  .wish-message {
-    font-size: 1.2rem;
-  }
+.letter-modal-container {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  animation: scaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-/* Subtle corner decoration element for an elegant gift feel */
-@keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 0.25; }
-  50% { transform: scale(1.25); opacity: 0.5; }
+/* Stationery Core UI */
+.opened-letter-paper {
+  background: #fffdfa;
+  border-radius: 2rem;
+  padding: 3.5rem 3rem;
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.7), inset 0 0 50px rgba(0,0,0,0.02);
+  color: #1e293b;
+  position: relative;
+  border: 12px double rgba(244, 63, 94, 0.1);
 }
 
-.regular-content {
-  margin-top: 4rem;
+.letter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
-/* ScrollStack inner padding */
-.scroll-stack-inner {
-  padding-bottom: 25rem !important;
+.letter-badge {
+  padding: 0.75rem;
+  border-radius: 50%;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.letter-stamp {
+  font-size: 2.25rem;
+}
+
+.opened-letter-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+}
+
+.letter-divider {
+  height: 2px;
+  background: linear-gradient(90deg, #fecdd3 0%, #fda4af 50%, #fecdd3 100%);
+  margin-bottom: 2rem;
+}
+
+.opened-letter-message {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: #334155;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 3rem;
+}
+
+.letter-footer {
+  text-align: right;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  color: #475569;
+}
+
+.signature {
+  font-weight: 700;
+  color: #e11d48;
+  font-size: 1.5rem;
+  margin-top: 6px !important;
+}
+
+.letter-close-btn {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  background: #ffffff;
+  color: #0f172a;
+  border: none;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease;
+  z-index: 10000;
+}
+
+.letter-close-btn:hover {
+  transform: scale(1.1) rotate(90deg);
 }
 
 @media (max-width: 768px) {
-  .scroll-stack-inner {
-    padding-bottom: 5rem !important;
+  .envelope-wrapper {
+    height: 300px;
+    max-width: 94%;
   }
-  
-  .wish-card-stack {
-    padding: 1.75rem;
-    min-height: 260px;
-    border-radius: 2rem;
+  .opened-letter-paper {
+    padding: 2.5rem 2rem;
   }
-  
-  .wish-icon-wrapper {
-    width: 3.5rem;
-    height: 3.5rem;
-    margin-bottom: 1.25rem;
+  .opened-letter-title {
+    font-size: 2rem;
   }
-  
-  .wish-icon {
-    width: 1.75rem;
-    height: 1.75rem;
-  }
-  
-  .wish-title {
-    font-size: 1.35rem;
-  }
-  
-  .wish-message {
-    font-size: 0.95rem;
-    max-width: 100%;
+  .opened-letter-message {
+    font-size: 1.1rem;
   }
 }
 
-/* Prevent body scroll when love letter is shown */
-body.love-letter-open {
-  overflow: hidden;
+/* --- Galaxy Background Stacking Fixes --- */
+
+/* Keeps the galaxy locked fullscreen behind content layers */
+.galaxy-background {
+  position: fixed !important;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
 }
 
-/* Make gallery background transparent */
-.gallery-black-bg {
+/* Eliminates blocky backgrounds overlaying the space canvas */
+.birthday-content-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100vh;
   background: transparent !important;
 }
 
-/* Galaxy container full screen */
-.galaxy-container {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+.birthday-content {
+  position: relative;
+  background: transparent !important;
 }
 
-/* Floating particles and confetti */
-.particle {
-  position: fixed;
-  pointer-events: none;
-  z-index: 1000;
-}
-
-.confetti-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 999;
+.regular-content {
+  position: relative;
+  background: transparent !important;
 }
