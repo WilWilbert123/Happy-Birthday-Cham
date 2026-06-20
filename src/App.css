@@ -6,7 +6,7 @@
   position: relative;
 }
 
-/* First Screen - White background */
+/* First Screen - Dark background for clean intro transition */
 .first-screen {
   position: fixed;
   top: 0;
@@ -29,7 +29,7 @@
   pointer-events: none;
 }
 
-/* Galaxy Background */
+/* Galaxy Background placement */
 .galaxy-background {
   position: fixed !important;
   top: 0;
@@ -40,12 +40,11 @@
   pointer-events: auto;
 }
 
-
 .birthday-content {
   animation: fadeInUp 0.8s ease-out;
   position: relative;
   z-index: 2;
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 /* Make interactive elements clickable */
@@ -72,20 +71,54 @@ footer {
   }
 }
 
-/* ScrollStack Card Styles */
+/* Enhanced Premium Glassmorphism Stack Cards */
 .wish-card-stack {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.75));
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 2rem;
-  padding: 2rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-  height: auto;
-  min-height: 300px;
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 240px;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  box-sizing: border-box;
+  width: 100%;
+
+  /* Lighter card styling for smoother scrolling */
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.45);
+  transition: box-shadow 220ms cubic-bezier(.2,.9,.2,1), transform 220ms ease, border-color 220ms ease;
+  will-change: transform, opacity;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Sheen + soft inner glow to simulate liquid surface */
+.wish-card-stack::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.02) 40%, rgba(255,255,255,0) 60%);
+  mix-blend-mode: overlay;
+  transform: translateY(-30%) rotate(-6deg) scale(1.2);
+  opacity: 0.9;
+  transition: transform 600ms cubic-bezier(.22,.9,.35,1), opacity 300ms ease;
+}
+
+.wish-card-stack::after {
+  content: "";
+  position: absolute;
+  right: -30%;
+  top: -10%;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(closest-side, rgba(255,255,255,0.06), rgba(255,255,255,0) 45%);
+  filter: blur(18px);
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity 300ms ease;
 }
 
 @media (min-width: 768px) {
@@ -95,55 +128,105 @@ footer {
   }
 }
 
+.wish-card-stack:hover {
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Reduce expensive rendering while scrolling to avoid blinking */
+.scroll-stack-scroller.is-scrolling .wish-card-stack {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15) !important;
+  transition: none !important;
+}
+
+.scroll-stack-scroller.is-scrolling .wish-icon-wrapper {
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+.scroll-stack-scroller.is-scrolling .wish-title,
+.scroll-stack-scroller.is-scrolling .wish-message {
+  text-shadow: none !important;
+}
+
 .wish-card-content {
   text-align: center;
   width: 100%;
+  position: relative;
 }
 
+/* Vivid Icon Container with custom gradients fallback */
 .wish-icon-wrapper {
-  width: 4rem;
-  height: 4rem;
-  background: linear-gradient(135deg, #f472b6, #a855f7);
+  width: 4.5rem;
+  height: 4.5rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.5rem;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  margin: 0 auto 1.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  position: relative;
+  /* Improve transform/scroll performance */
+  will-change: transform, opacity;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
+
+/* Safe Native CSS Gradients if Tailwind configurations don't scan them dynamically */
+.wish-icon-wrapper.from-pink-500 { background: linear-gradient(135deg, #f472b6, #f43f5e); }
+.wish-icon-wrapper.from-purple-500 { background: linear-gradient(135deg, #a855f7, #6366f1); }
+.wish-icon-wrapper.from-amber-400 { background: linear-gradient(135deg, #fbbf24, #f97316); }
+.wish-icon-wrapper.from-cyan-400 { background: linear-gradient(135deg, #22d3ee, #3b82f6); }
+.wish-icon-wrapper.from-emerald-400 { background: linear-gradient(135deg, #34d399, #14b8a6); }
+.wish-icon-wrapper.from-fuchsia-500 { background: linear-gradient(135deg, #d946ef, #ec4899); }
 
 .wish-icon {
-  width: 2rem;
-  height: 2rem;
+  width: 2.25rem;
+  height: 2.25rem;
   color: white;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
 }
 
+/* Clean, High-Contrast Typography for Ambient Dark Backgrounds */
 .wish-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #1f2937;
-  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.75rem;
   font-family: 'Playfair Display', serif;
+  letter-spacing: 0.4px;
+  text-shadow: none;
 }
 
 @media (min-width: 768px) {
   .wish-title {
-    font-size: 1.875rem;
+    font-size: 2.25rem;
   }
 }
 
 .wish-message {
-  color: #4b5563;
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1.6;
   font-size: 1rem;
+  font-weight: 400;
+  max-width: 92%;
+  margin: 0 auto;
+  text-shadow: none;
 }
 
 @media (min-width: 768px) {
   .wish-message {
-    font-size: 1.125rem;
+    font-size: 1.2rem;
   }
 }
 
+/* Subtle corner decoration element for an elegant gift feel */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.25; }
+  50% { transform: scale(1.25); opacity: 0.5; }
+}
 
 .regular-content {
   margin-top: 4rem;
@@ -160,27 +243,29 @@ footer {
   }
   
   .wish-card-stack {
-    padding: 1.5rem;
-    min-height: 250px;
+    padding: 1.75rem;
+    min-height: 260px;
+    border-radius: 2rem;
   }
   
   .wish-icon-wrapper {
-    width: 3rem;
-    height: 3rem;
-    margin-bottom: 1rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 1.25rem;
   }
   
   .wish-icon {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.75rem;
+    height: 1.75rem;
   }
   
   .wish-title {
-    font-size: 1.25rem;
+    font-size: 1.35rem;
   }
   
   .wish-message {
-    font-size: 0.875rem;
+    font-size: 0.95rem;
+    max-width: 100%;
   }
 }
 
