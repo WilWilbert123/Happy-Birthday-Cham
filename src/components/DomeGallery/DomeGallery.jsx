@@ -1,5 +1,5 @@
 // C:\Users\HERROZ\Desktop\Happy-Birthday-Cham\src\components\DomeGallery\DomeGallery.jsx
-import { useEffect, useMemo, useRef, useCallback } from 'react';
+import { useEffect, useMemo, useRef, useCallback, useState } from 'react';
 import { useGesture } from '@use-gesture/react';
 import './DomeGallery.css';
 
@@ -16,7 +16,8 @@ const DEFAULTS = {
   maxVerticalRotationDeg: 5,
   dragSensitivity: 20,
   enlargeTransitionMs: 300,
-  segments: 35
+  segments: 35,
+  autoRotateSpeed: 0.05 // Reduced from 0.15 to 0.05 for slower rotation
 };
 
 const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
@@ -104,7 +105,9 @@ export default function DomeGallery({
   openedImageHeight = '350px',
   imageBorderRadius = '30px',
   openedImageBorderRadius = '30px',
-  grayscale = true
+  grayscale = true,
+  autoRotateSpeed = DEFAULTS.autoRotateSpeed, // Default is now 0.05
+  autoRotateDelay = 3000
 }) {
   const rootRef = useRef(null);
   const mainRef = useRef(null);
@@ -124,6 +127,11 @@ export default function DomeGallery({
   const openingRef = useRef(false);
   const openStartedAtRef = useRef(0);
   const lastDragEndAt = useRef(0);
+  
+  // Auto-rotation refs
+  const autoRotateRAF = useRef(null);
+  const autoRotatePausedRef = useRef(false);
+  const autoRotateTimeoutRef = useRef(null);
 
   const scrollLockedRef = useRef(false);
   const lockScroll = useCallback(() => {
@@ -146,6 +154,64 @@ export default function DomeGallery({
       el.style.transform = `translateZ(calc(var(--radius) * -1)) rotateX(${xDeg}deg) rotateY(${yDeg}deg)`;
     }
   };
+
+  // Auto-rotation function with slower speed
+  const startAutoRotate = useCallback(() => {
+    if (autoRotateRAF.current) {
+      cancelAnimationFrame(autoRotateRAF.current);
+      autoRotateRAF.current = null;
+    }
+
+    if (autoRotatePausedRef.current || focusedElRef.current) return;
+
+    let lastTime = performance.now();
+    const step = (currentTime) => {
+      if (!autoRotatePausedRef.current && !focusedElRef.current && !draggingRef.current) {
+        // Calculate time delta for smooth animation
+        const deltaTime = (currentTime - lastTime) / 16.67; // Normalize to ~60fps
+        lastTime = currentTime;
+        
+        // Slowly rotate Y axis with delta time compensation
+        const rotationAmount = autoRotateSpeed * Math.min(deltaTime, 2); // Cap delta to prevent jumps
+        const newY = wrapAngleSigned(rotationRef.current.y + rotationAmount);
+        rotationRef.current.y = newY;
+        applyTransform(rotationRef.current.x, newY);
+      } else {
+        lastTime = currentTime;
+      }
+      autoRotateRAF.current = requestAnimationFrame(step);
+    };
+
+    autoRotateRAF.current = requestAnimationFrame(step);
+  }, [autoRotateSpeed]);
+
+  // Stop auto-rotation
+  const stopAutoRotate = useCallback(() => {
+    if (autoRotateRAF.current) {
+      cancelAnimationFrame(autoRotateRAF.current);
+      autoRotateRAF.current = null;
+    }
+    if (autoRotateTimeoutRef.current) {
+      clearTimeout(autoRotateTimeoutRef.current);
+      autoRotateTimeoutRef.current = null;
+    }
+  }, []);
+
+  // Pause auto-rotation temporarily (after user interaction)
+  const pauseAutoRotate = useCallback(() => {
+    autoRotatePausedRef.current = true;
+    stopAutoRotate();
+    
+    if (autoRotateTimeoutRef.current) {
+      clearTimeout(autoRotateTimeoutRef.current);
+    }
+    autoRotateTimeoutRef.current = setTimeout(() => {
+      autoRotatePausedRef.current = false;
+      if (!focusedElRef.current && !draggingRef.current) {
+        startAutoRotate();
+      }
+    }, autoRotateDelay);
+  }, [autoRotateDelay, startAutoRotate, stopAutoRotate]);
 
   const lockedRadiusRef = useRef(null);
 
@@ -235,7 +301,18 @@ export default function DomeGallery({
 
   useEffect(() => {
     applyTransform(rotationRef.current.x, rotationRef.current.y);
-  }, []);
+    
+    const startDelay = setTimeout(() => {
+      if (!focusedElRef.current) {
+        startAutoRotate();
+      }
+    }, 1000);
+    
+    return () => {
+      clearTimeout(startDelay);
+      stopAutoRotate();
+    };
+  }, [startAutoRotate, stopAutoRotate]);
 
   const stopInertia = useCallback(() => {
     if (inertiaRAF.current) {
@@ -259,10 +336,16 @@ export default function DomeGallery({
         vY *= frictionMul;
         if (Math.abs(vX) < stopThreshold && Math.abs(vY) < stopThreshold) {
           inertiaRAF.current = null;
+          if (!autoRotatePausedRef.current && !focusedElRef.current) {
+            startAutoRotate();
+          }
           return;
         }
         if (++frames > maxFrames) {
           inertiaRAF.current = null;
+          if (!autoRotatePausedRef.current && !focusedElRef.current) {
+            startAutoRotate();
+          }
           return;
         }
         const nextX = clamp(rotationRef.current.x - vY / 200, -maxVerticalRotationDeg, maxVerticalRotationDeg);
@@ -274,7 +357,7 @@ export default function DomeGallery({
       stopInertia();
       inertiaRAF.current = requestAnimationFrame(step);
     },
-    [dragDampening, maxVerticalRotationDeg, stopInertia]
+    [dragDampening, maxVerticalRotationDeg, stopInertia, startAutoRotate]
   );
 
   useGesture(
@@ -282,6 +365,8 @@ export default function DomeGallery({
       onDragStart: ({ event }) => {
         if (focusedElRef.current) return;
         stopInertia();
+        stopAutoRotate();
+        autoRotatePausedRef.current = true;
         const evt = event;
         draggingRef.current = true;
         movedRef.current = false;
@@ -318,7 +403,11 @@ export default function DomeGallery({
             vx = clamp((mx / dragSensitivity) * 0.02, -1.2, 1.2);
             vy = clamp((my / dragSensitivity) * 0.02, -1.2, 1.2);
           }
-          if (Math.abs(vx) > 0.005 || Math.abs(vy) > 0.005) startInertia(vx, vy);
+          if (Math.abs(vx) > 0.005 || Math.abs(vy) > 0.005) {
+            startInertia(vx, vy);
+          } else {
+            pauseAutoRotate();
+          }
           if (movedRef.current) lastDragEndAt.current = performance.now();
           movedRef.current = false;
         }
@@ -350,6 +439,9 @@ export default function DomeGallery({
         rootRef.current?.removeAttribute('data-enlarging');
         openingRef.current = false;
         unlockScroll();
+        if (!autoRotatePausedRef.current) {
+          startAutoRotate();
+        }
         return;
       }
       const currentRect = overlay.getBoundingClientRect();
@@ -410,6 +502,9 @@ export default function DomeGallery({
                 openingRef.current = false;
                 if (!draggingRef.current && rootRef.current?.getAttribute('data-enlarging') !== 'true')
                   document.body.classList.remove('dg-scroll-lock');
+                if (!autoRotatePausedRef.current) {
+                  startAutoRotate();
+                }
               }, 300);
             });
           });
@@ -426,7 +521,7 @@ export default function DomeGallery({
       scrim.removeEventListener('click', close);
       window.removeEventListener('keydown', onKey);
     };
-  }, [enlargeTransitionMs, unlockScroll]);
+  }, [enlargeTransitionMs, unlockScroll, startAutoRotate]);
 
   const openItemFromElement = useCallback(
     el => {
@@ -434,6 +529,10 @@ export default function DomeGallery({
       openingRef.current = true;
       openStartedAtRef.current = performance.now();
       lockScroll();
+      
+      stopAutoRotate();
+      autoRotatePausedRef.current = true;
+      
       const parent = el.parentElement;
       focusedElRef.current = el;
       el.setAttribute('data-focused', 'true');
@@ -466,6 +565,9 @@ export default function DomeGallery({
         focusedElRef.current = null;
         parent.removeChild(refDiv);
         unlockScroll();
+        if (!autoRotatePausedRef.current) {
+          startAutoRotate();
+        }
         return;
       }
 
@@ -539,7 +641,7 @@ export default function DomeGallery({
         overlay.addEventListener('transitionend', onFirstEnd);
       }
     },
-    [enlargeTransitionMs, lockScroll, openedImageHeight, openedImageWidth, segments, unlockScroll]
+    [enlargeTransitionMs, lockScroll, openedImageHeight, openedImageWidth, segments, unlockScroll, startAutoRotate, stopAutoRotate]
   );
 
   const onTileClick = useCallback(
@@ -568,8 +670,9 @@ export default function DomeGallery({
   useEffect(() => {
     return () => {
       document.body.classList.remove('dg-scroll-lock');
+      stopAutoRotate();
     };
-  }, []);
+  }, [stopAutoRotate]);
 
   return (
     <div

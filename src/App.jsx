@@ -4,15 +4,19 @@ import './App.css';
 import HeroSection from './components/HeroSection/HeroSection.jsx';
 import WishCard from './components/WishCard/WishCard.jsx';
 import Gallery from './components/Gallery/Gallery.jsx';
-import BirthdayCountdown from './components/BirthdayCountdown/BirthdayCountdown.jsx';
-import BirthdayWishes from './components/BirthdayWishes/BirthdayWishes.jsx';
 import ScrollStack, { ScrollStackItem } from './components/ScrollStack/ScrollStack.jsx';
 import Galaxy from './components/Galaxy/Galaxy.jsx';
+import ImageTrail from './components/ImageTrail/ImageTrail.jsx';
 import { Heart, Sparkles, Gift, Star, Music, Camera } from 'lucide-react';
 
 // Import your sound files
 import happyBday from './assets/sounds/happybday.mp3';
 import happyBdayPiano from './assets/sounds/happybdaypiano.mp3';
+
+// Import your images from assets/resources
+import image1 from './assets/resources/em.jpg';
+import image2 from './assets/resources/portr.png';
+import image3 from './assets/resources/wew.jpg';
 
 function App() {
   const [showFireworks, setShowFireworks] = useState(false);
@@ -21,19 +25,16 @@ function App() {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const audioRef = useRef(null);
 
-  // Define the playlist sequence
-  // 0 = happybday.mp3 (regular), 1 = happybdaypiano.mp3 (piano)
   const playlist = [
-    happyBday,           // Track 0: Regular
-    happyBdayPiano,      // Track 1: Piano
-    happyBdayPiano,      // Track 2: Piano
-    happyBday,           // Track 3: Regular
-    happyBdayPiano,      // Track 4: Piano
-    happyBdayPiano,      // Track 5: Piano
-    happyBday            // Track 6: Regular
+    happyBday,
+    happyBdayPiano,
+    happyBdayPiano,
+    happyBday,
+    happyBdayPiano,
+    happyBdayPiano,
+    happyBday
   ];
 
-  // Function to play current track
   const playCurrentTrack = () => {
     if (audioRef.current) {
       audioRef.current.src = playlist[currentTrackIndex];
@@ -43,11 +44,9 @@ function App() {
     }
   };
 
-  // Handle when a track ends - go to next track
   useEffect(() => {
     if (audioRef.current && bgMusic) {
       const handleTrackEnd = () => {
-        // Move to next track, loop back to start if at the end
         const nextIndex = (currentTrackIndex + 1) % playlist.length;
         setCurrentTrackIndex(nextIndex);
       };
@@ -62,7 +61,6 @@ function App() {
     }
   }, [currentTrackIndex, bgMusic]);
 
-  // Play new track when index changes
   useEffect(() => {
     if (bgMusic && audioRef.current) {
       playCurrentTrack();
@@ -81,56 +79,61 @@ function App() {
     setTimeout(() => setShowFireworks(false), 5000);
   };
 
+  // Upgraded wishes data with custom premium gradient mapping
   const wishes = [
     {
       icon: Heart,
       title: "Warm Wishes",
-      message: "May your day be filled with joy, laughter, and everything that makes you smile!"
+      message: "May your day be filled with joy, laughter, and everything that makes you smile!",
+      gradient: "from-pink-500 to-rose-500"
     },
     {
       icon: Sparkles,
       title: "Magical Moments",
-      message: "Every moment with you is magical. Here's to creating many more beautiful memories!"
+      message: "Every moment with you is magical. Here's to creating many more beautiful memories!",
+      gradient: "from-purple-500 to-indigo-500"
     },
     {
       icon: Gift,
       title: "Special Day",
-      message: "You deserve all the happiness in the world. Enjoy your special day to the fullest!"
+      message: "You deserve all the happiness in the world. Enjoy your special day to the fullest!",
+      gradient: "from-amber-400 to-orange-500"
     },
     {
       icon: Star,
       title: "Shining Bright",
-      message: "Keep shining like the star you are! The world is brighter with you in it."
+      message: "Keep shining like the star you are! The world is brighter with you in it.",
+      gradient: "from-cyan-400 to-blue-500"
     },
     {
       icon: Music,
       title: "Celebration Time",
-      message: "Let the music play, dance like nobody's watching - it's YOUR day!"
+      message: "Let the music play, dance like nobody's watching - it's YOUR day!",
+      gradient: "from-emerald-400 to-teal-500"
     },
     {
       icon: Camera,
       title: "Precious Memories",
-      message: "May this birthday add another beautiful chapter to your life's story!"
+      message: "May this birthday add another beautiful chapter to your life's story!",
+      gradient: "from-fuchsia-500 to-pink-600"
     }
   ];
 
+  const trailImages = [image1, image2, image3];
+
   return (
     <div className="app">
-      {/* Audio element for playlist */}
       <audio ref={audioRef}>
         Your browser does not support the audio element.
       </audio>
       
-      {/* First Screen - White background, no galaxy */}
       <div className={`first-screen ${showBirthdayContent ? 'hidden' : 'visible'}`}>
         <HeroSection name="Cham" onCelebrate={handleCelebrate} />
       </div>
       
-      {/* Second Screen - Only show galaxy and content after clicking love letter */}
       {showBirthdayContent && (
         <>
-          {/* Galaxy Background */}
-          <Galaxy 
+          <Galaxy
             focal={[0.5, 0.5]}
             rotation={[1.0, 0.0]}
             starSpeed={0.3}
@@ -150,7 +153,6 @@ function App() {
           />
           
           <div className="birthday-content">
-            {/* ScrollStack for Wish Cards */}
             <ScrollStack
               itemDistance={80}
               itemScale={0.02}
@@ -166,7 +168,7 @@ function App() {
               {wishes.map((wish, index) => (
                 <ScrollStackItem key={index} itemClassName="wish-card-stack">
                   <div className="wish-card-content">
-                    <div className="wish-icon-wrapper">
+                    <div className={`wish-icon-wrapper ${wish.gradient}`}>
                       <wish.icon className="wish-icon" />
                     </div>
                     <h3 className="wish-title">{wish.title}</h3>
@@ -176,11 +178,16 @@ function App() {
               ))}
             </ScrollStack>
             
-            {/* Regular content after the stack */}
             <div className="regular-content">
               <Gallery />
-              <BirthdayCountdown birthDate="2024-06-01" />
-              <BirthdayWishes />
+              
+              <div style={{ height: '600px', position: 'relative', overflow: 'hidden', marginTop: '2rem' }}>
+                <ImageTrail
+                  key="image-trail"
+                  items={trailImages}
+                  variant={1}
+                />
+              </div>
             </div>
             
             <footer className="py-8 text-center text-white/60 text-sm">
