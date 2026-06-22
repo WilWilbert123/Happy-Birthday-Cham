@@ -10,6 +10,11 @@
   position: relative;
 }
 
+.birthday-main-timeline {
+  position: relative;
+  width: 100%;
+}
+
 .birthday-content-wrapper {
   width: 100%;
   position: relative;
@@ -38,15 +43,14 @@ body.love-letter-open {
   text-align: center;
   box-sizing: border-box;
   position: relative;
-  overflow: hidden;
 }
 
-.galaxy-canvas-container {
-  position: absolute;
+.galaxy-canvas-container.persistent-galaxy {
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: 0;
   pointer-events: none;
 }
@@ -68,6 +72,15 @@ body.love-letter-open {
   background: linear-gradient(to top, #020617 15%, transparent 100%);
   z-index: 1;
   pointer-events: none;
+}
+
+/* Force timelines and content layers to accept transparency over the fixed background */
+.birthday-intro-container,
+.birthday-envelope-section,
+.regular-content {
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
 }
 
 /* ==========================================================================
@@ -199,7 +212,7 @@ body.love-letter-open {
 .stack-envelope {
   position: absolute;
   width: 100%;
-  height: 200%;
+  height: 240%;
   background: #ffe3e8;
   border: 2px solid rgba(244, 63, 94, 0.25);
   border-radius: 3rem;
@@ -215,7 +228,6 @@ body.love-letter-open {
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.35) !important;
 }
 
-/* envelope fold creases */
 .stack-envelope::before {
   content: "";
   position: absolute;
@@ -230,7 +242,6 @@ body.love-letter-open {
   z-index: 1;
 }
 
-/* flap */
 .envelope-flap {
   position: absolute;
   top: 0;
@@ -250,7 +261,6 @@ body.love-letter-open {
   transform: rotateX(35deg);
 }
 
-/* gift ribbons & bow */
 .envelope-gift-wrap {
   position: absolute;
   inset: 0;
@@ -349,7 +359,6 @@ body.love-letter-open {
   transform-origin: top left;
 }
 
-/* seal */
 .envelope-seal-wrapper {
   position: absolute;
   top: 50%;
@@ -375,7 +384,6 @@ body.love-letter-open {
   color: white;
 }
 
-/* click hint */
 .envelope-front-label {
   position: absolute;
   bottom: 25px;
@@ -409,9 +417,10 @@ body.love-letter-open {
   padding: 1.5rem;
   animation: fadeIn 0.3s forwards ease-out;
 }
+
 .letter-modal-container {
   width: 100%;
-  max-width: 600px;
+  max-width: 650px;
   position: relative;
   animation: scaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
@@ -419,19 +428,23 @@ body.love-letter-open {
 .opened-letter-paper {
   background-color: #fcf5e3;
   background-image:
-    radial-gradient(circle at 50% 50%, transparent 60%, rgba(139, 90, 43, 0.15) 85%, rgba(65, 36, 11, 0.65) 100%),
-    linear-gradient(rgba(240, 220, 180, 0.3) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 28px;
-  border-radius: 4% 35% 8% 25% / 20% 8% 15% 5%;
-  padding: 4rem 3.5rem;
+    radial-gradient(circle at 50% 50%, transparent 40%, rgba(139, 90, 43, 0.12) 70%, rgba(65, 36, 11, 0.55) 100%),
+    linear-gradient(rgba(240, 220, 180, 0.25) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 32px;
+  border-radius: 2% 4% 2% 4% / 4% 2% 4% 2%;
+  padding: 3rem 2.5rem;
   box-shadow:
     0 30px 70px rgba(0, 0, 0, 0.85),
-    inset 0 0 40px rgba(74, 41, 14, 0.4),
-    inset 0 0 100px rgba(43, 21, 4, 0.3);
+    inset 0 0 40px rgba(74, 41, 14, 0.3),
+    inset 0 0 100px rgba(43, 21, 4, 0.2);
   color: #2e2216;
   position: relative;
   border: 1px solid #5a3e25;
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
 }
+
 .opened-letter-paper::before {
   content: "";
   position: absolute;
@@ -446,44 +459,71 @@ body.love-letter-open {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
 }
+
 .letter-badge {
   padding: 0.65rem;
   border-radius: 50%;
   background: linear-gradient(135deg, #be123c, #9f1239);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
+
 .opened-letter-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   font-weight: 800;
   color: #4a1c24;
   margin: 0 0 0.25rem 0;
   font-style: italic;
   letter-spacing: -0.5px;
 }
+
 .letter-divider {
   height: 1px;
   background: linear-gradient(90deg, transparent 0%, #8c6239 50%, transparent 100%);
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   opacity: 0.6;
+  flex-shrink: 0;
 }
+
 .opened-letter-message {
-  font-size: 1.35rem;
-  line-height: 1.9;
+  font-size: 1.25rem;
+  line-height: 1.85;
   color: #3d2f20;
   font-family: 'Playfair Display', Georgia, serif;
   font-style: italic;
-  margin-bottom: 3.5rem;
+  margin-bottom: 2rem;
   text-shadow: 0 1px 0px rgba(255, 255, 255, 0.4);
+  overflow-y: auto;
+  padding-right: 10px;
+  flex-grow: 1;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 62, 37, 0.3) transparent;
 }
+
+.opened-letter-message::-webkit-scrollbar {
+  width: 5px;
+}
+.opened-letter-message::-webkit-scrollbar-track {
+  background: transparent;
+}
+.opened-letter-message::-webkit-scrollbar-thumb {
+  background-color: rgba(90, 62, 37, 0.3);
+  border-radius: 10px;
+}
+
 .letter-footer {
   text-align: right;
   font-family: 'Playfair Display', Georgia, serif;
   font-style: italic;
   color: #5c4631;
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 1rem;
 }
+
 .signature {
   font-weight: 700;
   color: #9f1239;
@@ -491,6 +531,7 @@ body.love-letter-open {
   margin-top: 4px !important;
   letter-spacing: 0.5px;
 }
+
 .letter-close-btn {
   position: absolute;
   top: -0.5rem;
@@ -509,24 +550,24 @@ body.love-letter-open {
   transition: transform 0.2s ease, background-color 0.2s ease;
   z-index: 10000;
 }
+
 .letter-close-btn:hover {
   transform: scale(1.1) rotate(90deg);
   background-color: #9f1239;
   color: #ffffff;
 }
 
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
+/* Responsive tweaks for mobile viewports */
 @media (max-width: 640px) {
-  .stack-envelope-wrapper {
-    max-width: 90%;
-    height: 140px;
+  .opened-letter-paper {
+    padding: 2.5rem 1.5rem;
+    border-radius: 8px;
   }
-  .seq-cosmic-text {
-    font-size: 3rem;
+  .opened-letter-title {
+    font-size: 1.8rem;
   }
-  .step-3, .step-4 {
-    font-size: 2rem;
+  .opened-letter-message {
+    font-size: 1.1rem;
+    line-height: 1.7;
   }
 }

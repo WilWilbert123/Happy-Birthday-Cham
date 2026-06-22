@@ -4,7 +4,7 @@ import { useGesture } from '@use-gesture/react';
 import './DomeGallery.css';
 
 // Import your local images
-import portrImage from '../../assets/resources/portr.png';
+import portrImage from '../../assets/resources/a.JPG';
 
 // Create an array of 20 images using your local image
 const DEFAULT_IMAGES = Array(20).fill().map((_, i) => ({

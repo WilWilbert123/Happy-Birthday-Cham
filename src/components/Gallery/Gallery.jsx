@@ -1,28 +1,34 @@
-// C:\Users\HERROZ\Desktop\Happy-Birthday-Cham\src\components\Gallery\Gallery.jsx
 import React from 'react';
 import DomeGallery from '../DomeGallery/DomeGallery.jsx';
 
-// Import your images
-import emImage from '../../assets/resources/em.jpg';
-import wewImage from '../../assets/resources/wew.jpg';
-import portrImage from '../../assets/resources/portr.png';
-
-// Create an array with all your images
-const galleryImages = [
-  { src: emImage, alt: 'Beautiful memory 1' },
-  { src: wewImage, alt: 'Beautiful memory 2' },
-  { src: portrImage, alt: 'Birthday portrait' },
-  { src: emImage, alt: 'Beautiful memory 3' },
-  { src: wewImage, alt: 'Beautiful memory 4' },
-  { src: portrImage, alt: 'Birthday memory' },
-  { src: emImage, alt: 'Beautiful memory 5' },
-  { src: wewImage, alt: 'Beautiful memory 6' },
-  { src: portrImage, alt: 'Special moment' },
-  { src: emImage, alt: 'Beautiful memory 7' },
-  { src: wewImage, alt: 'Beautiful memory 8' },
-  { src: portrImage, alt: 'Celebration' },
-  // Add more images as needed - you can repeat them
+// 1. Array containing all the specific filenames from your assets directory
+const imageFilenames = [
+    'c4.JPG', 'c5.JPG',
+  'd1.JPG',
+  'e1.JPG', 'e2.JPG', 'e4.JPG', 'e5.JPG', 'e6.JPG', 'e7.JPG', 'e8.JPG', 'e9.JPG',  
+  'f.JPG', 'f1.JPG', 'f2.JPG', 'f3.JPG', 'f5.JPG', 'f6.JPG', 'f7.JPG', 'f8.JPG', 'f9.JPG',
+  'g.JPG', 'g1.JPG', 'g2.JPG', 'g3.JPG', 'g4.JPG', 'g5.JPG',
+  'h.JPG',
+  'j.JPG',
+  'k.JPG',
+  'l.JPG',
+  'o.JPG',
+  'p.JPG',
+  'portr.JPG',
+  't.JPG',
+  'u.JPG',
+  'wew.JPG',
+  'x.JPG'
 ];
+
+// 2. Convert filenames into the required gallery format with dynamic imports
+const galleryImages = imageFilenames.map((filename, index) => {
+  return {
+    // Relative path pointing to your assets/resources folder
+    src: new URL(`../../assets/resources/${filename}`, import.meta.url).href,
+    alt: `Beautiful memory ${index + 1}`
+  };
+});
 
 const Gallery = () => {
   return (
